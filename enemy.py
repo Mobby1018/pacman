@@ -5,7 +5,7 @@ from vector import Vectors
 from constants import *
 from random import randint
 
-#movement with ghost is a little different from pacman
+#movement with ghost is a little different from pacman TEST
 #ghost can't go back down the path they came except for specific situations
 #player doesn't input direction the ghosts choose a random one
 class Entity(object):
