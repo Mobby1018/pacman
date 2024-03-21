@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 import numpy as np
+from animation import Animator
 
 BASETILEWIDTH = 16
 BASETILEHEIGHT = 16
@@ -25,6 +26,9 @@ class PacmanSprites(Spritesheet):
         Spritesheet.__init__(self)
         self.entity = entity
         self.entity.image = self.getStartImage()
+        self.animations = {}
+        self.defineAnimations()
+        self.stopimage = (8, 0)
 
     def getStartImage(self):
         return self.getImage(8, 0)
@@ -32,6 +36,31 @@ class PacmanSprites(Spritesheet):
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
+    def defineAnimations(self):
+        self.animations[LEFT] = Animator(((8,0), (0,0), (0,2), (0,0)))
+        self.animations[RIGHT] = Animator(((10,0), (2,0), (2,2), (2,0)))
+        self.animations[UP] = Animator(((10,2), (6,0), (6,2), (6,0)))
+        self.animations[DOWN] = Animator(((8,2), (4,0), (4,2), (4,0)))
+
+    def update(self, dt):
+        if self.entity.direction == LEFT:
+            self.entity.image = self.getImage(*self.animations[LEFT].update(dt))
+            self.stopimage = (8, 0)
+        elif self.entity.direction == RIGHT:
+            self.entity.image = self.getImage(*self.animations[RIGHT].update(dt))
+            self.stopimage = (10, 0)
+        elif self.entity.direction == DOWN:
+            self.entity.image = self.getImage(*self.animations[DOWN].update(dt))
+            self.stopimage = (8, 2)
+        elif self.entity.direction == UP:
+            self.entity.image = self.getImage(*self.animations[UP].update(dt))
+            self.stopimage = (10, 2)
+        elif self.entity.direction == STOP:
+            self.entity.image = self.getImage(*self.stopimage)
+
+    def reset(self):
+        for key in list(self.animations.keys()):
+            self.animations[key].reset()
 class GhostSprites(Spritesheet):
     def __init__(self, entity):
         Spritesheet.__init__(self)
@@ -78,6 +107,7 @@ class MazeSprites(Spritesheet):
     def __init__(self, mazefile):
         Spritesheet.__init__(self)
         self.data = self.readMazeFile(mazefile)
+        self.rotdata = self.readMazeFile(rotfile)
 
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, TILEWIDTH, TILEHEIGHT)
@@ -91,9 +121,14 @@ class MazeSprites(Spritesheet):
                 if self.data[row][col].isdigit():
                     x = int(self.data[row][col]) + 12
                     sprite = self.getImage(x, y)
+                    rotval = int(self.rotdata[row][col])
+                    sprite = self.rotate(sprite, rotval)
                     background.blit(sprite, (col*TILEWIDTH, row*TILEHEIGHT))
                 elif self.data[row][col] == '=':
                     sprite = self.getImage(10, 8)
                     background.blit(sprite, (col*TILEWIDTH, row*TILEHEIGHT))
 
         return background
+    
+    def rotate(self, sprite, value):
+        return pygame.transform.rotate(sprite, value*90)

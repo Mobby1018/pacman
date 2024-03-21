@@ -1,13 +1,9 @@
-#stuff i need imported, putting from removes the need for the prefix thing i dont know the name of
 import pygame
 from pygame.locals import *
 from vector import Vectors
 from constants import *
 from random import randint
 
-#movement with ghost is a little different from pacman TEST
-#ghost can't go back down the path they came except for specific situations
-#player doesn't input direction the ghosts choose a random one
 class Entity(object):
     def __init__(self, node):
         self.name = None
@@ -46,7 +42,6 @@ class Entity(object):
 
             self.setPosition()
 
-    #checks for valid directions to move to 
     def validDirection(self, direction):
         if direction is not STOP:
             if self.name in self.node.access[direction]:
@@ -54,13 +49,11 @@ class Entity(object):
                     return True
         return False
 
-    #gets a new target location, new node
     def getNewTarget(self, direction):
         if self.validDirection(direction):
             return self.node.neighbors[direction]
         return self.node
 
-    #prevents the ghosts from overshooting the node
     def overshotTarget(self):
         if self.target is not None:
             vec1 = self.target.position - self.node.position
@@ -70,7 +63,7 @@ class Entity(object):
             return node2Self >= node2Target
         return False
     
-    #stops ghosts from going back the direction they came
+    #stops ghost from moving in the reverse direction
     def reverseDirection(self):
         self.direction *= -1
         temp = self.node
@@ -103,8 +96,7 @@ class Entity(object):
         distances = []
         for direction in directions:
             vec = self.node.position + self.directions[direction]*TILEWIDTH - self.goal
-            index = distances.index(min(distances))
-            return directions[index]
+            distances.append(vec.magnitudeSquared())
         index = distances.index(min(distances))
         return directions[index]
 
@@ -117,7 +109,8 @@ class Entity(object):
     def setBetweenNodes(self, direction):
         if self.node.neighbors[direction] is not None:
             self.target = self.node.neighbors[direction]
-            self.position = (self.node.position + self.target.position) / 2.0
+            self.position = (self.node.position + self.target.position)
+            self.position = Vectors.__div__(self.position,2)
     
     def reset(self):
         self.setStartNode(self.startNode)
@@ -131,7 +124,9 @@ class Entity(object):
     def render(self, screen):
         if self.visible:
             if self.image is not None:
-                screen.blit(self.image, self.position.asTuple())
+                adjust = Vector2(TILEWIDTH, TILEHEIGHT) / 2
+                p = self.position - adjust
+                screen.blit(self.image, p.asTuple())
             else:
                 p = self.position.asInt()
                 pygame.draw.circle(screen, self.color, p, self.radius)

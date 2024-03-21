@@ -52,6 +52,7 @@ class GameController(object):
     def startGame(self):
         self.setBackground()
         self.nodes = NodeGroup("maze.txt")
+        self.nodes = NodeGroup("maze_rotate.txt")
         self.nodes.setPortalPair((0,17), (27,17))
         homekey = self.nodes.createHomeNodes(11.5, 14)
         self.nodes.connectHomeNodes(homekey, (12,14), LEFT)
@@ -164,7 +165,6 @@ class GameController(object):
                 self.pause.setPause(pauseTime=3, func=self.nextLevel)
     def render(self):
         self.screen.blit(self.background, (0,0))
-        self.nodes.render(self.screen)
         self.pellets.render(self.screen)
         if self.fruit is not None:
             self.fruit.render(self.screen)

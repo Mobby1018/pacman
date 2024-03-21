@@ -13,20 +13,20 @@ class Vectors(object):
     #actual calculations for coordinates
     def __add__(self, other):
         return Vectors(self.x + other.x, self.y + other.y)
-    def __subtract__(self, other):
+    def __sub__(self, other):
         return Vectors(self.x - other.x, self.y - other.y)
-    def __negative__(self):
+    def __neg__(self):
         return Vectors(-self.x, -self.y)
     #scalar has to do with speed (look it up loser)
-    def __multiply__(self, scalar):
+    def __mul__(self, scalar):
         return Vectors(self.x * scalar, self.y * scalar)
-    def __divide__(self, scalar):
+    def __div__(self, scalar):
         if scalar != 0:
             return Vectors(self.x / float(scalar), self.y / float(scalar))
         return None
     #checks for equality between vectors
     #this is where thress is needed to make it a little less specific
-    def __equal__(self, other):
+    def __eq__(self, other):
         if abs(self.x - other.x) < self.thresh:
             if abs(self.y - other.y) < self.thresh:
                 return True
