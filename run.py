@@ -3,7 +3,7 @@ from pygame.locals import *
 from constants import *
 from nodes import NodeGroup
 from pacman import Pacman
-from pellets import PelletGroup
+from pellets import *
 from ghosts import GhostGroup
 from fruit import Fruit
 from pause import Pause
@@ -28,7 +28,7 @@ class GameController(object):
         self.lifesprites = LifeSprites(self.lives)
         self.flashBG = False
         self.flashTime = 0.2
-        self.flsahTimer = 0
+        self.flashTimer = 0
         self.fruitCaptured = []
         self.mazedata = MazeData()
     def restartGame(self):
@@ -149,7 +149,7 @@ class GameController(object):
                 elif ghost.mode.current is not SPAWN:
                     if self.pacman.alive:
                         self.lives -= 1
-                        self.livesprites.removeImage()
+                        self.lifesprites.removeImage()
                         self.pacman.die()
                         if self.lives <= 0:
                             self.textgroup.showText(GAMEOVERTXT)
@@ -185,7 +185,7 @@ class GameController(object):
                 self.ghosts.inky.startNode.allowAccess(RIGHT, self.ghosts.inky)
             if self.pellets.numEaten == 70:
                 self.ghosts.clyde.startNode.allowAccess(LEFT, self.ghosts.clyde)
-            self.pelletList.remove(pellet)
+            self.pellets.pelletList.remove(pellet)
             if pellet.name == POWERPELLET:
                 self.ghosts.startFreight()
             if self.pellets.isEmpty():

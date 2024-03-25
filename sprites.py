@@ -90,7 +90,7 @@ class GhostSprites(Spritesheet):
                 self.entity.image = self.getImage(x, 4)
         elif self.entity.mode.current == FREIGHT:
             self.entity.image = self.getImage(10, 4)
-        elif self.enitty.mode.current == SPAWN:
+        elif self.entity.mode.current == SPAWN:
             if self.entity.direction == LEFT:
                 self.entity.image = self.getImage(8, 8)
             elif self.entity.direction == RIGHT:

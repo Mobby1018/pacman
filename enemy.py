@@ -79,7 +79,7 @@ class Entity(object):
 
     #Actually checks to see what directions are possible
     def validDirections(self):
-        directions = {}
+        directions = []
         for key in [UP, DOWN, LEFT, RIGHT]:
             if self.validDirection(key):
                 if key != self.direction * -1:
