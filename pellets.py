@@ -56,7 +56,7 @@ class PelletGroup(object):
                     self.pelletList.append(pp)
                     self.powerpellets.append(pp)
 
-    def redPelletfile(self, textfile):
+    def readPelletfile(self, textfile):
         return np.loadtxt(textfile, dtype='<U1')
 
     def isEmpty(self):

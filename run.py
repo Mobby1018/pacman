@@ -8,7 +8,7 @@ from ghosts import GhostGroup
 from fruit import Fruit
 from pause import Pause
 from text import TextGroup
-from sprites import LifeSprites
+from sprites import *
 from mazedata import MazeData
 
 class GameController(object):
@@ -66,7 +66,7 @@ class GameController(object):
         self.background = self.background_norm
     def startGame(self):
         self.mazedata.loadMaze(self.level)
-        self.mazesprites = MazeSprites(self.mazedata.obj.name+".txt", self.mazedata.obj.name+" _rotate.txt")
+        self.mazesprites = MazeSprites(self.mazedata.obj.name+".txt", self.mazedata.obj.name+"_rotate.txt")
         self.setBackground() 
         self.nodes = NodeGroup(self.mazedata.obj.name+".txt")
         self.mazedata.obj.setPortalPairs(self.nodes)

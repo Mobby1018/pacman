@@ -131,7 +131,7 @@ class LifeSprites(Spritesheet):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
 class MazeSprites(Spritesheet):
-    def __init__(self, mazefile):
+    def __init__(self, mazefile, rotfile):
         Spritesheet.__init__(self)
         self.data = self.readMazeFile(mazefile)
         self.rotdata = self.readMazeFile(rotfile)

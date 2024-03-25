@@ -7,7 +7,7 @@ from modes import ModeController
 from sprites import GhostSprites
 
 class Ghost(Entity):
-    def __init__(self, node, pacman=None):
+    def __init__(self, node, pacman=None, blinky=None):
         Entity.__init__(self, node)
         self.name = GHOST
         self.points = 200

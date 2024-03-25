@@ -19,7 +19,7 @@ class MazeBase(object):
     def addOffset(self, x, y):
         return x+self.homeoffset[0], y+self.homeoffset[1]
 
-    def denyGhostsAccess(self, ghots, nodes):
+    def denyGhostsAccess(self, ghosts, nodes):
         nodes.denyAccessList(*(self.addOffset(2, 3) + (LEFT, ghosts)))
         nodes.denyAccessList(*(self.addoffset(2, 3) + (RIGHT, ghosts)))
         for direction in list(self.ghostNodeDeny.keys()):

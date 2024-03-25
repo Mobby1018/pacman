@@ -124,7 +124,7 @@ class Entity(object):
     def render(self, screen):
         if self.visible:
             if self.image is not None:
-                adjust = Vector2(TILEWIDTH, TILEHEIGHT) / 2
+                adjust = Vectors(TILEWIDTH, TILEHEIGHT) / 2
                 p = self.position - adjust
                 screen.blit(self.image, p.asTuple())
             else:
