@@ -114,6 +114,7 @@ class GhostGroup(object):
         self.inky = Inky(node, pacman, self.blinky)
         self.clyde = Clyde(node, pacman)
         self.ghosts = [self.blinky, self.pinky, self.inky, self.clyde]
+        self.name = ("ghostGroup")
     def __iter__(self):
         return iter(self.ghosts)
     def update(self,dt):

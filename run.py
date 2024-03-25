@@ -199,7 +199,7 @@ class GameController(object):
             self.fruit.render(self.screen)
         self.pacman.render(self.screen)
         self.ghosts.render(self.screen)
-        self.textgroup.redner(self.screen)
+        self.textgroup.render(self.screen)
         for i in range(len(self.lifesprites.images)):
             x = self.lifesprites.images[i].get_width() * i
             y = SCREENHEIGHT - self.lifesprites.images[i].get_height()

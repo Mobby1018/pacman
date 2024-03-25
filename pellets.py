@@ -15,7 +15,8 @@ class Pellet(object):
 
     def render(self, screen):
         if self.visible:
-            adjust = Vectors(TILEWIDTH, TILEHEIGHT) / 2
+            adjust = Vectors(TILEWIDTH, TILEHEIGHT)
+            adjust = Vectors.__div__(adjust, 2)
             p = self.position + adjust
             pygame.draw.circle(screen, self.color, p.asInt(), self.radius)
 
@@ -66,4 +67,4 @@ class PelletGroup(object):
 
     def render(self, screen):
         for pellet in self.pelletList:
-            prellet.render(screen)
+            pellet.render(screen)

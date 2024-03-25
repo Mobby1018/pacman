@@ -21,7 +21,7 @@ class MazeBase(object):
 
     def denyGhostsAccess(self, ghosts, nodes):
         nodes.denyAccessList(*(self.addOffset(2, 3) + (LEFT, ghosts)))
-        nodes.denyAccessList(*(self.addoffset(2, 3) + (RIGHT, ghosts)))
+        nodes.denyAccessList(*(self.addOffset(2, 3) + (RIGHT, ghosts)))
         for direction in list(self.ghostNodeDeny.keys()):
             for values in self.ghostNodeDeny[direction]:
                 nodes.denyAccessList(*(values + (direction, ghosts)))
