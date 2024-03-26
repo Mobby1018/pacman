@@ -31,6 +31,8 @@ class Ghost(Entity):
         self.goal = Vectors()
     
     def startFreight(self):
+        FM_sound = pygame.mixer.Sound('Breathing.wav')
+        FM_sound.play()
         self.mode.setFreightMode()
         if self.mode.current == FREIGHT:
             self.setSpeed(50)
