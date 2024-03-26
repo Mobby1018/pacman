@@ -122,6 +122,8 @@ class GameController(object):
                 self.fruit = Fruit(self.nodes.getNodeFromTiles(9, 20))
         if self.fruit is not None:
             if self.pacman.collideCheck(self.fruit):
+                EF_sound = pygame.mixer.Sound('burp.wav')
+                EF_sound.play()
                 self.updateScore(self.fruit.points)
                 self.textgroup.addText(str(self.fruit.points), WHITE, self.fruit.position.x, self.fruit.position.y, 8, time=1)
                 fruitCaptured = False
@@ -138,6 +140,8 @@ class GameController(object):
         for ghost in self.ghosts:
             if self.pacman.collideGhost(ghost):
                 if ghost.mode.current is FREIGHT:
+                    GE_sound = pygame.mixer.Sound('chewing.wav')
+                    GE_sound.play()
                     self.pacman.visible = False
                     ghost.visible = False
                     self.updateScore(ghost.points)
@@ -148,6 +152,8 @@ class GameController(object):
                     self.nodes.allowHomeAccess(ghost)
                 elif ghost.mode.current is not SPAWN:
                     if self.pacman.alive:
+                        PD_sound = pygame.mixer.Sound('ahhhh.wav')
+                        PD_sound.play()
                         self.lives -= 1
                         self.lifesprites.removeImage()
                         self.pacman.die()
@@ -179,6 +185,8 @@ class GameController(object):
     def checkPelletEvents(self):
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
         if pellet:
+            P_sound = pygame.mixer.Sound('wak.wav')
+            P_sound.play()
             self.pellets.numEaten += 1
             self.updateScore(pellet.points)
             if self.pellets.numEaten == 30:
@@ -187,8 +195,12 @@ class GameController(object):
                 self.ghosts.clyde.startNode.allowAccess(LEFT, self.ghosts.clyde)
             self.pellets.pelletList.remove(pellet)
             if pellet.name == POWERPELLET:
+                PP_sound = pygame.mixer.Sound('chewing.wav')
+                PP_sound.play()
                 self.ghosts.startFreight()
             if self.pellets.isEmpty():
+                LC_sound = pygame.mixer.Sound('wooo.wav')
+                LC_sound.play()
                 self.flashBG = True
                 self.hideEntities()
                 self.pause.setPause(pauseTime=3, func=self.nextLevel)
