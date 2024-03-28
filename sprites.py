@@ -83,6 +83,7 @@ class GhostSprites(Spritesheet):
 
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
+    
     def update(self, dt):
         x = self.x[self.entity.name]
         if self.entity.mode.current in [SCATTER, CHASE]:

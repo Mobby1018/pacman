@@ -249,7 +249,7 @@ class GameController(object):
             x = SCREENWIDTH - self.fruitCaptured[i].get_width() * (i+1)
             y = SCREENHEIGHT - self.fruitCaptured[i].get_height()
             self.screen.blit(self.fruitCaptured[i], (x,y))
-            pygame.display.update()
+        pygame.display.update()
 
 #for actually running the game
 if __name__ == "__main__":
