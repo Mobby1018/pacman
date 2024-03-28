@@ -3,6 +3,7 @@ from vector import Vectors
 from constants import *
 import numpy as np
 
+#Creating pellets
 class Pellet(object):
     def __init__(self, row, column):
         self.name = PELLET 
@@ -20,6 +21,7 @@ class Pellet(object):
             p = self.position + adjust
             pygame.draw.circle(screen, self.color, p.asInt(), self.radius)
 
+#creating power pellets
 class PowerPellet(Pellet):
     def __init__(self, row, column):
         Pellet.__init__(self, row, column)
@@ -35,6 +37,7 @@ class PowerPellet(Pellet):
             self.visible = not self.visible
             self.timer = 0
 
+#grouping the pellets together
 class PelletGroup(object):
     def __init__(self, pelletfile):
         self.pelletList = []

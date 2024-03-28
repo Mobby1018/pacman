@@ -3,9 +3,12 @@ from constants import *
 import numpy as np
 from animation import Animator
 
+
 BASETILEWIDTH = 16
 BASETILEHEIGHT = 16
 DEATH = 5
+
+#pulls my spritesheet
 class Spritesheet(object):
     def __init__(self):
         self.sheet = pygame.image.load("spritesheet.png").convert()
@@ -21,6 +24,7 @@ class Spritesheet(object):
         self.sheet.set_clip(pygame.Rect(x, y, width, height))
         return self.sheet.subsurface(self.sheet.get_clip())
 
+#defines the locations of the pacman sprites
 class PacmanSprites(Spritesheet):
     def __init__(self, entity):
         Spritesheet.__init__(self)
@@ -65,6 +69,8 @@ class PacmanSprites(Spritesheet):
     def reset(self):
         for key in list(self.animations.keys()):
             self.animations[key].reset()
+
+#pulls sprites for ghosts
 class GhostSprites(Spritesheet):
     def __init__(self, entity):
         Spritesheet.__init__(self)
@@ -100,6 +106,7 @@ class GhostSprites(Spritesheet):
             elif self.entity.direction == UP:
                 self.entity.image = self.getImage(8, 4)
 
+#pulls sprites for fruit
 class FruitSprites(Spritesheet):
     def __init__(self, entity, level):
         Spritesheet.__init__(self)
@@ -113,6 +120,7 @@ class FruitSprites(Spritesheet):
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
+#pulls sprites for the player lives
 class LifeSprites(Spritesheet):
     def __init__(self, numlives):
         Spritesheet.__init__(self)
@@ -130,6 +138,7 @@ class LifeSprites(Spritesheet):
     def getImage(self, x, y):
         return Spritesheet.getImage(self, x, y, 2*TILEWIDTH, 2*TILEHEIGHT)
 
+#pulls the maze sprites, like walls
 class MazeSprites(Spritesheet):
     def __init__(self, mazefile, rotfile):
         Spritesheet.__init__(self)

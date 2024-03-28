@@ -1,5 +1,6 @@
 from constants import *
 
+#defines main modes, chase/scatter, and allows swapping between
 class MainMode(object):
     def __init__(self):
         self.timer = 0
@@ -23,6 +24,7 @@ class MainMode(object):
         self.time = 20
         self.timer = 0 
 
+#For controller modes
 class ModeController(object):
     def __init__(self, entity):
         self.timer = 0 
@@ -31,6 +33,7 @@ class ModeController(object):
         self.current = self.mainmode.mode
         self.entity = entity
 
+#freight mode info
     def setFreightMode(self):
         if self.current in [SCATTER, CHASE]:
             self.timer = 0 
@@ -54,6 +57,7 @@ class ModeController(object):
                 self.entity.normalMode()
                 self.current = self.mainmode.mode
 
+#sfor setting spawn mode
     def setSpawnMode(self):
         if self.current is FREIGHT:
             self.current = SPAWN

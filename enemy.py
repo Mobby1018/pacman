@@ -4,6 +4,7 @@ from vector import Vectors
 from constants import *
 from random import randint
 
+#General properties and such of all entities, fruit, pacman, ghosts, pellets
 class Entity(object):
     def __init__(self, node):
         self.name = None
@@ -21,9 +22,11 @@ class Entity(object):
         self.setStartNode(node)
         self.image = None
 
+#sets the node position of the entity
     def setPosition(self):
         self.position = self.node.position.copy()
 
+#updates the positin of th entity
     def update(self, dt):
         self.position += self.directions[self.direction]*self.speed*dt
 
@@ -42,6 +45,7 @@ class Entity(object):
 
             self.setPosition()
 
+#checks to see if direction is valid
     def validDirection(self, direction):
         if direction is not STOP:
             if self.name in self.node.access[direction]:
@@ -49,11 +53,13 @@ class Entity(object):
                     return True
         return False
 
+#gets a new target direction
     def getNewTarget(self, direction):
         if self.validDirection(direction):
             return self.node.neighbors[direction]
         return self.node
 
+#for actually moving to the node
     def overshotTarget(self):
         if self.target is not None:
             vec1 = self.target.position - self.node.position
@@ -63,21 +69,21 @@ class Entity(object):
             return node2Self >= node2Target
         return False
     
-    #stops ghost from moving in the reverse direction
+#stops ghost from moving in the direction it came
     def reverseDirection(self):
         self.direction *= -1
         temp = self.node
         self.node = self.target
         self.target = temp
 
-    #allows the ghost to go in the opposite direction from where it came
+#allows the ghost to go in the direction from where it came
     def oppositeDirection(self, direction):
         if direction is not STOP:
             if direction == self.direction * -1:
                 return True
         return False
 
-    #Actually checks to see what directions are possible
+#defines what the directions are
     def validDirections(self):
         directions = []
         for key in [UP, DOWN, LEFT, RIGHT]:
@@ -88,10 +94,11 @@ class Entity(object):
             directions.append(self.direction * -1)
         return directions
 
-    #Now I need to choose a direction from the valid directions at random
+#for choosing a random directions
     def randomDirection(self, directions):
         return directions[randint(0, len(directions)-1)]
 
+#sets a goal direction
     def goalDirection(self, directions):
         distances = []
         for direction in directions:
@@ -100,27 +107,31 @@ class Entity(object):
         index = distances.index(min(distances))
         return directions[index]
 
+#needed to set the starting node for entities
     def setStartNode(self, node):
         self.node = node
         self.startNode = node
         self.target = node
         self.setPosition()
 
+#for setting entities between nodes
     def setBetweenNodes(self, direction):
         if self.node.neighbors[direction] is not None:
             self.target = self.node.neighbors[direction]
             self.position = (self.node.position + self.target.position)
             self.position = Vectors.__div__(self.position,2)
-    
+#for reseting entity info
     def reset(self):
         self.setStartNode(self.startNode)
         self.direction = STOP
         self.speed = 100
         self.visible = True
 
+#this is so that if the maze is bigger the speed can be adjusted, that way everything doesnt look like it's moving slower
     def setSpeed(self, speed):
         self.speed = speed * TILEWIDTH / 16
 
+#for rendering entities
     def render(self, screen):
         if self.visible:
             if self.image is not None:

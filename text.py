@@ -2,6 +2,7 @@ import pygame
 from vector import Vectors
 from constants import *
 
+#for setting up text
 class Text(object):
     def __init__(self, text, color, x, y , size, time=None, id=None, visible=True):
         self.id = id
@@ -37,6 +38,8 @@ class Text(object):
         if self.visible:
             x, y = self.position.asTuple()
             screen.blit(self.label, (x, y))
+
+#groups the different kinds of text
 class TextGroup(object):
     def __init__(self):
         self.nextid = 10

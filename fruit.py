@@ -3,6 +3,7 @@ from enemy import Entity
 from constants import *
 from sprites import FruitSprites
 
+#Fruit entity class
 class Fruit(Entity):
     def __init__(self, node, level=0):
         Entity.__init__(self,node)
@@ -14,6 +15,7 @@ class Fruit(Entity):
         self.points = 100 + level*20
         self.setBetweenNodes(RIGHT)
         self.sprites = FruitSprites(self,level)
+#updates the fruit stuff
     def update(self, dt):
         self.timer += dt
         if self.timer >= self.lifespan:

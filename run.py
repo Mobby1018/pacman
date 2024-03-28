@@ -11,6 +11,7 @@ from text import TextGroup
 from sprites import *
 from mazedata import MazeData
 
+#The game:
 class GameController(object):
     def __init__(self):
         pygame.init()
@@ -31,6 +32,8 @@ class GameController(object):
         self.flashTimer = 0
         self.fruitCaptured = []
         self.mazedata = MazeData()
+    
+    #for restarting the game
     def restartGame(self):
         self.lives = 3
         self.level = 0 
@@ -42,6 +45,8 @@ class GameController(object):
         self.textgroup.showText(READYTXT)
         self.startGame()
         self.fruitCaptured = []
+    
+    #for reseting the level
     def resetLevel(self):
         self.pause.paused = True
         self.pacman.reset()
@@ -49,12 +54,16 @@ class GameController(object):
         self.fruit = None
         self.textgroup.showText(READYTXT)
         self.lifesprites.resetLives(self.lives)
+    
+    #brings you to the next level
     def nextLevel(self):
         self.showEntities()
         self.level += 1
         self.pause.paused = True
         self.textgroup.updateLevel(self.level)
         self.startGame()
+
+    #for setting the background
     def setBackground(self):
         self.background_norm = pygame.surface.Surface(SCREENSIZE).convert()
         self.background_norm.fill(BLACK)
@@ -64,6 +73,8 @@ class GameController(object):
         self.background_flash = self.mazesprites.constructBackground(self.background_flash, 5)
         self.flashBG = False
         self.background = self.background_norm
+    
+    #process for starting game
     def startGame(self):
         self.mazedata.loadMaze(self.level)
         self.mazesprites = MazeSprites(self.mazedata.obj.name+".txt", self.mazedata.obj.name+"_rotate.txt")
@@ -84,6 +95,8 @@ class GameController(object):
         self.ghosts.inky.startNode.denyAccess(RIGHT, self.ghosts.inky)
         self.ghosts.clyde.startNode.denyAccess(LEFT, self.ghosts.clyde)
         self.mazedata.obj.denyGhostsAccess(self.ghosts, self.nodes)
+    
+    #updates game events
     def update(self):
         dt = self.clock.tick(30) / 1000.0
         self.textgroup.update(dt)
@@ -113,9 +126,13 @@ class GameController(object):
             afterPauseMethod()
         self.checkEvents()
         self.render()
+    
+    #updates score
     def updateScore(self, points):
         self.score += points
         self.textgroup.updateScore(self.score)
+    
+    #checks for fruit events
     def checkFruitEvents(self):
         if self.pellets.numEaten == 50 or self.pellets.numEaten == 140:
             if self.fruit is None:
@@ -136,6 +153,8 @@ class GameController(object):
                 self.fruit = None
             elif self.fruit.destroy:
                 self.fruit = None
+    
+    #checks for ghost events
     def checkGhostEvents(self):
         for ghost in self.ghosts:
             if self.pacman.collideGhost(ghost):
@@ -162,12 +181,18 @@ class GameController(object):
                             self.pause.setPause(pauseTime=3, func=self.restartGame)
                         else:
                             self.pause.setPause(pauseTime=3, func=self.resetLevel)
+    
+    #for showing entities
     def showEntities(self):
         self.pacman.visible = True
         self.ghosts.show()
+    
+    #for hiding the entities
     def hideEntities(self):
         self.pacman.visible = False
         self.ghosts.hide()
+    
+    #checks for key events like quitting and pausing
     def checkEvents(self):
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -182,6 +207,8 @@ class GameController(object):
                     else:
                         self.textgroup.showText(PAUSETXT)
                         self.hideEntities()
+
+    #Checks for pellet events
     def checkPelletEvents(self):
         pellet = self.pacman.eatPellets(self.pellets.pelletList)
         if pellet:
@@ -204,6 +231,8 @@ class GameController(object):
                 self.flashBG = True
                 self.hideEntities()
                 self.pause.setPause(pauseTime=3, func=self.nextLevel)
+    
+    #renders everything
     def render(self):
         self.screen.blit(self.background, (0,0))
         self.pellets.render(self.screen)
@@ -220,7 +249,9 @@ class GameController(object):
             x = SCREENWIDTH - self.fruitCaptured[i].get_width() * (i+1)
             y = SCREENHEIGHT - self.fruitCaptured[i].get_height()
             self.screen.blit(self.fruitCaptured[i], (x,y))
-        pygame.display.update()
+            pygame.display.update()
+
+#for actually running the game
 if __name__ == "__main__":
     game = GameController()
     game.startGame()

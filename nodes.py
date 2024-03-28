@@ -7,7 +7,7 @@ import numpy as np
 #numpy will be used to read text files
 
 class Node(object):
-    #defining all the nodes and what can move there
+    #defining directions of nodes and what can move within the nodes
     def __init__(self, x, y):
         self.position = Vectors(x, y)
         self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL:None}
@@ -16,14 +16,17 @@ class Node(object):
                        LEFT:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUIT],
                        RIGHT:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUIT]}
     
+    #for denying access to nodes
     def denyAccess(self, direction, entity):
         if entity.name in self.access[direction]:
             self.access[direction].remove(entity.name)
 
+    #for allowing access to nodes
     def allowAccess(self, direction, entity):
         if entity.name not in self.access[direction]:
             self.access[direction].append(entity.name)
 
+    #not really important anymore, mostly just for seeing the node connections if need be
     def render(self, screen):
         for n in self.neighbors.keys():
             if self.neighbors[n] is not None:
@@ -31,9 +34,8 @@ class Node(object):
                 line_end = self.neighbors[n].position.asTuple()
                 pygame.draw.line(screen, WHITE, line_start, line_end, 4)
                 pygame.draw.circle(screen, RED, self.position.asInt(), 12)
-                #Nodes are the red
-                #Lines connecting the nodes are white
-#Nodes and info being grouped
+
+#grouping nodes together
 class NodeGroup(object):
     def __init__(self, level):
         self.level = level
@@ -95,10 +97,11 @@ class NodeGroup(object):
                     key = None
 
     #says what node i want pacman to start on
-    #temp first node
     def getStartTempNode(self):
         nodes = list(self.nodesLUT.values())
         return nodes[0]
+
+    #portal pairs
     def setPortalPair(self, pair1, pair2):
         key1 = self.constructKey(*pair1)
         key2 = self.constructKey(*pair2)
@@ -106,6 +109,7 @@ class NodeGroup(object):
             self.nodesLUT[key1].neighbors[PORTAL] = self.nodesLUT[key2]
             self.nodesLUT[key2].neighbors[PORTAL] = self.nodesLUT[key1]
 
+    #ghost home
     def createHomeNodes(self, xoffset, yoffset):
         homedata = np.array([['X','X','+','X','X'],
                              ['X','X','.','X','X'],
@@ -117,7 +121,8 @@ class NodeGroup(object):
         self.connectVertically(homedata, xoffset, yoffset)
         self.homekey = self.constructKey(xoffset+2, yoffset)
         return self.homekey
-
+    
+    #making ghost home work
     def connectHomeNodes(self, homekey, otherkey, direction):
         key = self.constructKey(*otherkey)
         self.nodesLUT[homekey].neighbors[direction] = self.nodesLUT[key]

@@ -6,6 +6,7 @@ from enemy import Entity
 from modes import ModeController
 from sprites import GhostSprites
 
+#Ghost ai basically
 class Ghost(Entity):
     def __init__(self, node, pacman=None, blinky=None):
         Entity.__init__(self, node)
@@ -18,6 +19,7 @@ class Ghost(Entity):
         self.blinky = blinky
         self.homeNode = node
 
+#updates the ghost stuff
     def update(self, dt):
         self.sprites.update(dt)
         self.mode.update(dt)
@@ -27,9 +29,11 @@ class Ghost(Entity):
             self.chase()
         Entity.update(self, dt)
 
+#scatter = ghosts scatter to their set areas
     def scatter(self):
         self.goal = Vectors()
-    
+
+#starts freight mode 
     def startFreight(self):
         FM_sound = pygame.mixer.Sound('Breathing.wav')
         FM_sound.play()
@@ -37,28 +41,40 @@ class Ghost(Entity):
         if self.mode.current == FREIGHT:
             self.setSpeed(50)
             self.directionMethod = self.randomDirection
+
+#sets the goal to spawn
     def spawn(self):
         self.goal = self.spawnNode.position
 
+#sets the spawn node
     def setSpawnNode(self, node):
         self.spawnNode = node
+
+#starts the spawn mode
     def startSpawn(self):
         self.mode.setSpawnMode()
         if self.mode.current == SPAWN:
             self.setSpeed(150)
             self.directionMethod = self.goalDirection
             self.spawn()
+#for returning ghosts to their normal behaviors
     def normalMode(self):
         self.setSpeed(100)
         self.directionMethod = self.goalDirection
         self.homeNode.denyAccess(DOWN, self)
 
+#chase is for setting the goal to pacmans position
     def chase(self):
         self.goal = self.pacman.position
+
+#resets info like points
     def reset(self):
         Entity.reset(self)
         self.points = 200
         self.directionMethod = self.goalDirection
+
+#info for blinky (red one)
+#blinky is pretty much just the code above, blinky tries to take the shortest route to pacman
 class Blinky(Ghost):
     def __init__(self, node, pacman=None, blinky=None):
         Ghost.__init__(self, node, pacman, blinky)
@@ -66,6 +82,8 @@ class Blinky(Ghost):
         self.color = RED
         self.sprites = GhostSprites(self)
 
+#info for Pinky (pink one)
+#similar to Blinky but instead of the goal being pacman, the goal is in front of pacman
 class Pinky(Ghost):
     def __init__(self, node, pacman=None, blinky=None):
         Ghost.__init__(self, node, pacman, blinky)
@@ -77,6 +95,8 @@ class Pinky(Ghost):
     def chase(self):
         self.goal = self.pacman.position + self.pacman.directions[self.pacman.direction] * TILEWIDTH * 4
 
+#info for Inky (teal one)
+#Inky bases his position on both Pacman and Blinky
 class Inky(Ghost):
     def __init__(self, node, pacman=None, blinky=None):
         Ghost.__init__(self, node, pacman, blinky)
@@ -92,6 +112,8 @@ class Inky(Ghost):
         vec2 = (vec1 - self.blinky.position) * 2
         self.goal = self.blinky.position + vec2
 
+#info for Clyde (orange one)
+#When Clyde is at least 8 tiles away he will chase pacman. Otherwise he will be set in scatter mode.
 class Clyde(Ghost):
     def __init__(self, node, pacman=None, blinky=None):
         Ghost.__init__(self, node, pacman, blinky)
@@ -109,6 +131,9 @@ class Clyde(Ghost):
             self.scatter()
         else:
             self.goal = self.pacman.position + self.pacman.directions[self.pacman.direction] * TILEWIDTH * 4
+
+#For grouping the ghosts into one set group
+#makes them easier to handle
 class GhostGroup(object):
     def __init__(self, node, pacman):
         self.blinky = Blinky(node, pacman)

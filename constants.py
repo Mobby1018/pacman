@@ -1,3 +1,4 @@
+#Various variables that will be needed throughout the game repeatedly
 TILEWIDTH = 16
 TILEHEIGHT = 16
 NROWS = 36
